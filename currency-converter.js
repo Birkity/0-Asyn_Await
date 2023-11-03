@@ -12,4 +12,10 @@ const getExchangeRate = async (fromCurrency, toCurrency) => {
   
 }
 
-getExchangeRate('USDRWF', 'USDSAR');
+const getCountries = async (toCurrency) => {
+    const response = await axios.get(`http://api.countrylayer.com/v2/currency/${toCurrency}?access_key=e56c9c079a5e98e501aca2748f9a88d1`);
+    //console.log(response.data);
+    return response.data.map(country => country.name);
+}
+
+getCountries('AFN');
