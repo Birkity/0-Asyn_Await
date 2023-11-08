@@ -7,6 +7,10 @@ const getExchangeRate = async (fromCurrency, toCurrency) => {
     const rate = response.data.quotes;
     const euro = 1/ rate[fromCurrency];
     const exchangeRate = euro * rate[toCurrency];
+
+    if(isNaN(exchangeRate)){
+        throw new Error (`Unable to get currency ${fromCurrency} and ${toCurrency}`)
+    }
     
     return exchangeRate;
   
@@ -18,4 +22,19 @@ const getCountries = async (toCurrency) => {
     return response.data.map(country => country.name);
 }
 
-getCountries('AFN');
+//getCountries('AFN');
+const convertCurrency = async (fromCurrency, toCurrency, amount) =>{
+    const exchangeRate = await getExchangeRate(fromCurrency,toCurrency);
+    const countries = await getCountries(toCurrency);
+    const convertedAmount = (amount * exchangeRate).toFixed(2);
+
+    return `${amount} ${fromCurrency} is worth ${convertedAmount} ${toCurrency}. You can spent these in the following countries: ${countries} `;
+}
+
+convertCurrency('USD', 'AFN',30)
+.then((message) => {
+    console.log(`${message}`);
+})
+.catch((error)=>{
+    console.log(error.message);
+})
