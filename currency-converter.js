@@ -17,9 +17,15 @@ const getExchangeRate = async (fromCurrency, toCurrency) => {
 }
 
 const getCountries = async (toCurrency) => {
-    const response = await axios.get(`http://api.countrylayer.com/v2/currency/${toCurrency}?access_key=e56c9c079a5e98e501aca2748f9a88d1`);
-    //console.log(response.data);
-    return response.data.map(country => country.name);
+    try {
+        const response = await axios.get(`http://api.countrylayer.com/v2/currency/${toCurrency}?access_key=e56c9c079a5e98e501aca2748f9a88d1`);
+        //console.log(response.data);
+        return response.data.map(country => country.name);
+        
+    } catch (error) {
+        throw new Error(`Unable to get countries that use ${toCurrency}`)
+    }
+   
 }
 
 //getCountries('AFN');
